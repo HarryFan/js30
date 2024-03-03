@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JS30-Day1</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="keys">
+        <div data-key="65" class="key">
+            <div>A</div>
+            <span class="sound">Drum1</span>
+        </div>
+        <div data-key="83" class="key">
+            <div>S</div>
+            <span class="sound">Drum2</span>
+        </div>
+        <div data-key="68" class="key">
+            <div>D</div>
+            <span class="sound">Drum3</span>
+        </div>
+        <div data-key="70" class="key">
+            <div>F</div>
+            <span class="sound">Drum4</span>
+        </div>
+        <div data-key="71" class="key">
+            <div>G</div>
+            <span class="sound">Drum5</span>
+        </div>
+        <div data-key="72" class="key">
+            <div>H</div>
+            <span class="sound">Drum6</span>
+        </div>
+        <div data-key="74" class="key">
+            <div>J</div>
+            <span class="sound">Drum7</span>
+        </div>
+        <div data-key="75" class="key">
+            <div>K</div>
+            <span class="sound">Drum8</span>
+        </div>
+        <div data-key="76" class="key">
+            <div>L</div>
+            <span class="sound">Drum9</span>
+        </div>
+    </div>
+
+    <audio data-key="65" src="sounds/drum1.mp3"></audio>
+    <audio data-key="83" src="sounds/drum2.mp3"></audio>
+    <audio data-key="68" src="sounds/drum3.mp3"></audio>
+    <audio data-key="70" src="sounds/drum4.mp3"></audio>
+    <audio data-key="71" src="sounds/drum5.mp3"></audio>
+    <audio data-key="72" src="sounds/drum6.mp3"></audio>
+    <audio data-key="74" src="sounds/drum7.mp3"></audio>
+    <audio data-key="75" src="sounds/drum8.mp3"></audio>
+    <audio data-key="76" src="sounds/drum9.mp3"></audio>
+
+    <script>
+        //選擇class為.key的元素
+        let keys = Array.from(document.querySelectorAll('.key'))
+        //keys不是真的陣列，是nodeList，所以無法使用所有array的methods，使用forEach綁定事件
+
+        // keys.forEach(function(key){
+        //     addEventListener('transitionend',removeTransition)
+        // }) 可簡寫成箭頭函式
+        keys.forEach(key => key.addEventListener('transitionend',removeTransition))
+
+        window.addEventListener('keydown',playSound)
+        //在transition結束時會觸發的function
+        function removeTransition(e){
+            //e.propertyName會包含所有transition的屬性，我們這邊只需要transform
+            if(e.propertyName !== 'transform') return;
+            e.target.classList.remove('playing')
+        }
+        //播放音效的function
+        function playSound(e){
+            const audio = document.querySelector(`audio[data-key="${e.keyCode}"`)
+            const key = document.querySelector(`div[data-key="${e.keyCode}"`)
+            //如果按下的按鍵不是預先設有音效的按鍵，就return掉結束function
+            if(!audio) return
+            //按下的按鍵增加playing這個class 
+            key.classList.add('playing')
+            //讓每次播放音效都從0秒開始
+            audio.currentTime = 0
+            //播放音效
+            audio.play()
+        }
+    </script>
+</body>
+
+</html>
